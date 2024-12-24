@@ -72,6 +72,7 @@ ALLOWED_HOSTS = ['128.199.26.204']
 
 CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
+X_FRAME_OPTIONS = 'DENY'  # Protects against clickjacking
 
 
 TEMPLATES = [
