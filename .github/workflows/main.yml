@@ -3,7 +3,7 @@ name: Deploy to DigitalOcean
 on:
   push:
     branches:
-      - main  # Trigger the workflow on pushes to the 'main' branch
+      - main
 
 jobs:
   deploy:
@@ -16,21 +16,21 @@ jobs:
       - name: Set Up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.12'  # Match your project’s Python version
+          python-version: '3.12'
 
       - name: Install Dependencies Locally
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Deploy to DigitalOcean via SSH
+      - name: Deploy to DigitalOcean via SCP
         uses: appleboy/scp-action@v0.1.4
         with:
           host: ${{ secrets.DO_DROPLET_IP }}
           username: ${{ secrets.DO_SSH_USERNAME }}
           key: ${{ secrets.DO_SSH_PRIVATE_KEY }}
-          source: "."
-          target: "/var/www/efficient_corporates_project"  # Path on the droplet
+          source: "./"
+          target: "/var/www/efficient_corporates_project"
 
       - name: SSH and Restart Services
         uses: appleboy/ssh-action@v1.0.0
@@ -40,11 +40,21 @@ jobs:
           key: ${{ secrets.DO_SSH_PRIVATE_KEY }}
           script: |
             cd /var/www/efficient_corporates_project
-            python3 -m venv venv  # Create virtual environment
-            source venv/bin/activate  # Activate virtual environment
-            pip install --upgrade pip  # Ensure pip is updated
+            python3 -m venv venv
+            source venv/bin/activate
+            pip install --upgrade pip
             pip install -r requirements.txt
             python manage.py migrate
             python manage.py collectstatic --noinput
-            systemctl restart gunicorn
-            systemctl restart nginx
+            sudo systemctl restart gunicorn
+            sudo systemctl restart nginx
+
+      - name: Debug Deployment
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.DO_DROPLET_IP }}
+          username: ${{ secrets.DO_SSH_USERNAME }}
+          key: ${{ secrets.DO_SSH_PRIVATE_KEY }}
+          script: |
+            ls -la /var/www/efficient_corporates_project
+            cat /var/www/efficient_corporates_project/gunicorn.log
