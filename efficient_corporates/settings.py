@@ -51,28 +51,28 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'efficient_corporates.urls'
 
-#DEBUG = True
+DEBUG = True
 
 #ALLOWED_HOSTS = []
 
 MERCHANT_ID="PGTESTPAYUAT140"
 PHONE_PE_SALT="775765ff-824f-4cc4-9053-c3926e493514"
 PHONE_PE_HOST="https://api-preprod.phonepe.com/apis/pg-sandbox"
-#DJANGO_CUSTOM_REDIRECT_URL="http://127.0.0.1:8000/payment-status/"
-#DJANGO_CUSTOM_CALLBACK_URL="http://127.0.0.1:8000/webhook/"
+DJANGO_CUSTOM_REDIRECT_URL="http://127.0.0.1:8000/payment-status/"
+DJANGO_CUSTOM_CALLBACK_URL="http://127.0.0.1:8000/webhook/"
 
 
-DJANGO_CUSTOM_REDIRECT_URL="http://128.199.26.204/payment-status/"
-DJANGO_CUSTOM_CALLBACK_URL="http://128.199.26.204/webhook/"
+#DJANGO_CUSTOM_REDIRECT_URL="http://128.199.26.204/payment-status/"
+#DJANGO_CUSTOM_CALLBACK_URL="http://128.199.26.204/webhook/"
 
-DEBUG = False
+#DEBUG = False
 # Specify trusted origins for CSRF protection
-CSRF_TRUSTED_ORIGINS = ['http://128.199.26.204',]
-ALLOWED_HOSTS = ['128.199.26.204']
+#CSRF_TRUSTED_ORIGINS = ['http://128.199.26.204',]
+#ALLOWED_HOSTS = ['128.199.26.204']
 
-CSRF_COOKIE_SECURE = True
-SESSION_COOKIE_SECURE = True
-X_FRAME_OPTIONS = 'DENY'  # Protects against clickjacking
+#CSRF_COOKIE_SECURE = True
+#SESSION_COOKIE_SECURE = True
+#X_FRAME_OPTIONS = 'DENY'  # Protects against clickjacking
 
 
 TEMPLATES = [
