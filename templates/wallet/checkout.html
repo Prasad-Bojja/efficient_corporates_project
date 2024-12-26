@@ -9,7 +9,9 @@
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 	<link rel="shortcut icon" type="image/png" href="{% static 'images/favicon.ico' %}"/>
+   
     <style>
+        
         		/* General Reset */
 body {
     font-family: Arial, sans-serif;
@@ -43,7 +45,13 @@ body {
     color: #01ffff;
     font-weight: bold;
 }
-
+.timer {
+    font-size: 1rem;
+    background-color: #ff0000;
+    display: inline-block;
+    padding: 8px;
+    border-radius: 5px;
+}
 .highlight {
     color: #01ffff;
     text-decoration: underline;
@@ -57,18 +65,17 @@ body {
     border-radius: 5px;
 }
 
-/* Main Content Section */
 .main-content {
     display: flex;
+    flex-wrap: wrap; /* Ensures wrapping on smaller screens */
     gap: 20px;
 }
 
+
 /* Form Section */
-.form-section {
-    flex: 1;
-    background-color: #2c2c2c;
-    padding: 20px;
-    border-radius: 10px;
+.form-section h3, .bonus-section h3 {
+    font-size: 1rem;
+    margin-bottom: 20px;
 }
 
 .form-section h3 {
@@ -99,16 +106,7 @@ body {
     font-size: 0.9rem;
 }
 
-.submit-btn {
-    width: 100%;
-    padding: 10px;
-    background-color: #28a745;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    font-size: 1rem;
-    cursor: pointer;
-}
+
 
 .submit-btn i {
     margin-left: 5px;
@@ -127,14 +125,37 @@ body {
     margin-bottom: 15px;
 }
 
+
+.submit-btn {
+    width: 100%;
+    padding: 10px;
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+/* Bonus Section */
 .bonus-card {
     background-color: #007bff;
-    padding: 15px;
+    padding: 10px;
     margin-bottom: 10px;
     border-radius: 5px;
     color: #fff;
 }
 
+/* Responsive Design */
+@media (min-width: 768px) {
+    .main-content {
+        flex-wrap: nowrap; /* Side-by-side layout for larger screens */
+    }
+
+    .form-section, .bonus-section {
+        flex: 1;
+    }
+}
 .bonus-card h4 {
     margin: 0;
     font-size: 1rem;
@@ -154,8 +175,8 @@ body {
 .order-summary img {
     max-width: 100%;
 }
-
     </style>
+   
 </head>
 
 
