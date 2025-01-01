@@ -20,6 +20,8 @@ import logging
 # Initialize the logger
 logger = logging.getLogger('wallet')
 
+
+@csrf_exempt
 def create_payment_transaction(request):
     context = {}
     logger.info("create_payment_transaction view accessed")
