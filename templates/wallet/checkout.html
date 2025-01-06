@@ -6,187 +6,161 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Order Registration Page</title>
     <link rel="stylesheet" href="{% static 'css/checkout.css' %}">
-    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-	<link rel="shortcut icon" type="image/png" href="{% static 'images/favicon.ico' %}"/>
-   
+    <link rel="shortcut icon" type="image/png" href="{% static 'images/favicon.ico' %}"/>
+
     <style>
-        
-        		/* General Reset */
-body {
-    font-family: Arial, sans-serif;
-    background-color: #0e1217;
-    color: #fff;
-    margin: 0;
-    padding: 0;
-}
+        /* General Reset */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #0e1217;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+        }
 
-.container {
-    max-width: 900px;
-    margin: 50px auto;
-    background-color: #1e1e1e;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5);
-}
+        .container {
+            max-width: 900px;
+            margin: 30px auto;
+            background-color: #1e1e1e;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5);
+        }
 
-/* Header Section */
-.header {
-    text-align: center;
-    margin-bottom: 20px;
-}
+        /* Header Section */
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
 
-.header h2 {
-    font-size: 1.5rem;
-    margin-bottom: 10px;
-}
+        .header h2 {
+            font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+            margin-bottom: 10px;
+        }
 
-.congrats {
-    color: #01ffff;
-    font-weight: bold;
-}
-.timer {
-    font-size: 1rem;
-    background-color: #ff0000;
-    display: inline-block;
-    padding: 8px;
-    border-radius: 5px;
-}
-.highlight {
-    color: #01ffff;
-    text-decoration: underline;
-}
+        .congrats {
+            color: #01ffff;
+            font-weight: bold;
+        }
 
-.timer {
-    font-size: 1.2rem;
-    background-color: #ff0000;
-    display: inline-block;
-    padding: 10px;
-    border-radius: 5px;
-}
+        .timer {
+            font-size: clamp(1rem, 2.5vw, 1.2rem);
+            background-color: #ff0000;
+            display: inline-block;
+            padding: 8px;
+            border-radius: 5px;
+        }
 
-.main-content {
-    display: flex;
-    flex-wrap: wrap; /* Ensures wrapping on smaller screens */
-    gap: 20px;
-}
+        .highlight {
+            color: #01ffff;
+            text-decoration: underline;
+        }
 
+        .main-content {
+            display: flex;
+            flex-wrap: wrap; /* Ensures wrapping on smaller screens */
+            gap: 20px;
+        }
 
-/* Form Section */
-.form-section h3, .bonus-section h3 {
-    font-size: 1rem;
-    margin-bottom: 20px;
-}
+        /* Form Section */
+        .form-section h3, .bonus-section h3 {
+            font-size: clamp(1rem, 2.5vw, 1.2rem);
+            margin-bottom: 20px;
+        }
 
-.form-section h3 {
-    margin-bottom: 20px;
-    font-size: 1.2rem;
-}
+        .form-section input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #444;
+            border-radius: 5px;
+            background-color: #1e1e1e;
+            color: #fff;
+        }
 
-.form-section input {
-    width: 95%;
-    padding: 10px;
-    margin-bottom: 15px;
-    border: 1px solid #444;
-    border-radius: 5px;
-    background-color: #1e1e1e;
-    color: #fff;
-}
+        .form-section input::placeholder {
+            color: #aaa;
+        }
 
-.form-section input::placeholder {
-    color: #aaa;
-}
+        .terms-box {
+            background-color: #fffbcc;
+            color: #333;
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            font-size: 0.9rem;
+        }
 
-.terms-box {
-    background-color: #fffbcc;
-    color: #333;
-    padding: 10px;
-    margin-bottom: 15px;
-    border-radius: 5px;
-    font-size: 0.9rem;
-}
+        .submit-btn {
+            width: 100%;
+            padding: 10px;
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+        }
 
+        /* Bonus Section */
+        .bonus-section {
+            flex: 1;
+            background-color: #2c2c2c;
+            padding: 20px;
+            border-radius: 10px;
+        }
 
+        .bonus-card {
+            background-color: #007bff;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            color: #fff;
+        }
 
-.submit-btn i {
-    margin-left: 5px;
-}
+        .bonus-card h4 {
+            margin: 0;
+            font-size: 1rem;
+            font-weight: bold;
+        }
 
-/* Bonus Section */
-.bonus-section {
-    flex: 1;
-    background-color: #2c2c2c;
-    padding: 20px;
-    border-radius: 10px;
-}
+        .bonus-card p {
+            font-size: 0.9rem;
+        }
 
-.bonus-section h3 {
-    font-size: 1.2rem;
-    margin-bottom: 15px;
-}
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
 
+            .main-content {
+                flex-direction: column;
+            }
 
-.submit-btn {
-    width: 100%;
-    padding: 10px;
-    background-color: #28a745;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    font-size: 1rem;
-    cursor: pointer;
-}
+            .form-section, .bonus-section {
+                flex: 1 1 100%; /* Take full width on smaller screens */
+            }
+        }
 
-/* Bonus Section */
-.bonus-card {
-    background-color: #007bff;
-    padding: 10px;
-    margin-bottom: 10px;
-    border-radius: 5px;
-    color: #fff;
-}
+        /* Order Summary */
+        .order-summary {
+            text-align: center;
+            margin-top: 30px;
+        }
 
-/* Responsive Design */
-@media (min-width: 768px) {
-    .main-content {
-        flex-wrap: nowrap; /* Side-by-side layout for larger screens */
-    }
-
-    .form-section, .bonus-section {
-        flex: 1;
-    }
-}
-.bonus-card h4 {
-    margin: 0;
-    font-size: 1rem;
-    font-weight: bold;
-}
-
-.bonus-card p {
-    font-size: 0.9rem;
-}
-
-/* Order Summary */
-.order-summary {
-    text-align: center;
-    margin-top: 30px;
-}
-
-.order-summary img {
-    max-width: 100%;
-}
+        .order-summary img {
+            max-width: 100%;
+        }
     </style>
-   
 </head>
-
 
 <body>
     <section class="container">
-        
-
         <div class="header">
-            <h2><span class="congrats">Congrats!</span> You are just one step away from <span class="highlight">Generating high quality leads.</span></h2>
-            <div class="timer" id="countdown">10 : 00</div>
+            <h2><span class="congrats">Congrats!</span> You are just one step away from <span class="highlight">Generating high-quality leads.</span></h2>
+            <div class="timer" id="countdown">10:00</div>
         </div>
 
         <!-- Main Content Section -->
@@ -194,7 +168,7 @@ body {
             <!-- Left Form Section -->
             <div class="form-section">
                 <h3>Enter Your Details To Complete Your Order & Registration</h3>
-               <form method="post" action="">
+                <form method="post" action="{% url 'create_payment_transaction' %}">
                     {% csrf_token %}
 
                     <input type="text" name="first_name" placeholder="Full Name" required>
@@ -229,32 +203,18 @@ body {
         </div>
     </section>
     <script>
-        // Set the countdown duration to 10 minutes (600 seconds)
         let time = 600;
 
-        // Function to update the countdown
         function updateTimer() {
-            let minutes = Math.floor(time / 60);
-            let seconds = time % 60;
+            const minutes = String(Math.floor(time / 60)).padStart(2, '0');
+            const seconds = String(time % 60).padStart(2, '0');
+            document.getElementById("countdown").textContent = `${minutes}:${seconds}`;
 
-            // Format minutes and seconds to be two digits
-            minutes = minutes < 10 ? "0" + minutes : minutes;
-            seconds = seconds < 10 ? "0" + seconds : seconds;
-
-            // Display the countdown
-            document.getElementById("countdown").textContent = `${minutes} : ${seconds}`;
-
-            // Decrease the time by 1 second
-            if (time > 0) {
-                time--;
-            } else {
-                clearInterval(timerInterval);
-                alert("Time's up!");
-            }
+            if (time > 0) time--;
+            else alert("Time's up!");
         }
 
-        // Update the timer every second
-        const timerInterval = setInterval(updateTimer, 1000);
+        setInterval(updateTimer, 1000);
     </script>
 </body>
 </html>
