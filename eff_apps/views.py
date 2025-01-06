@@ -36,6 +36,7 @@ def create_payment_transaction(request):
         email_id = request.POST.get('email_id')
         mobile = request.POST.get('mobile')
 
+        # Validate amount
         if not amount:
             logger.warning("Amount is missing in the request")
             context['error'] = "Amount is required"
@@ -54,13 +55,17 @@ def create_payment_transaction(request):
             return render(request, 'wallet/checkout.html', context)
 
         logger.debug("Amount validated successfully")
+        
+        # Initialize PhonePe integration
         phonepe = PhonePe(
-            MERCHANT_ID,
-            PHONE_PE_SALT,
-            PHONE_PE_HOST,
-            DJANGO_CUSTOM_REDIRECT_URL,
-            DJANGO_CUSTOM_CALLBACK_URL
+            settings.MERCHANT_ID,
+            settings.PHONE_PE_SALT,
+            settings.PHONE_PE_HOST,
+            settings.DJANGO_CUSTOM_REDIRECT_URL,
+            settings.DJANGO_CUSTOM_CALLBACK_URL
         )
+        
+        # Create a unique order ID
         order_id = uuid.uuid4().hex
         try:
             order_data = phonepe.create_txn(order_id, amount_cents, email_id)
@@ -76,6 +81,7 @@ def create_payment_transaction(request):
             context['error'] = "Payment initiation failed. Please contact support."
             return render(request, 'wallet/checkout.html', context)
 
+        # Create payment transaction record
         transaction, created = PaymentTransaction.objects.get_or_create(
             first_name=first_name,
             email_id=email_id,
