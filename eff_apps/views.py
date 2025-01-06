@@ -24,7 +24,7 @@ logger = logging.getLogger('wallet')
 
 #from django.views.decorators.csrf import ensure_csrf_cookie
 
-@csrf_protect
+@csrf_exempt
 def create_payment_transaction(request):
     context = {}
     logger.info("create_payment_transaction view accessed")

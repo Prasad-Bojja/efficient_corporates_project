@@ -7,39 +7,97 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
-    <div class="container">
-        <h2 class="mt-5">Payment Checkout</h2>
-        
-        <form method="POST" action="{% url 'create_payment_transaction' %}">
+    <div class="container mt-5">
+        <h2 class="text-center">Payment Checkout</h2>
+        <p class="text-muted text-center">Fill out the details below to proceed with your payment.</p>
+
+        <!-- Checkout Form -->
+        <form method="POST" action="{% url 'create_payment_transaction' %}" class="mt-4">
             {% csrf_token %}
-            
+
+            <!-- Amount Field -->
             <div class="form-group">
                 <label for="amount">Amount (in Rs.)</label>
-                <input type="number" class="form-control" id="amount" name="amount" min="1" required>
+                <input 
+                    type="number" 
+                    class="form-control" 
+                    id="amount" 
+                    name="amount" 
+                    min="1" 
+                    placeholder="Enter amount" 
+                    required>
+                <div class="invalid-feedback">Please enter a valid amount.</div>
             </div>
-            
+
+            <!-- First Name Field -->
             <div class="form-group">
                 <label for="first_name">First Name</label>
-                <input type="text" class="form-control" id="first_name" name="first_name" required>
+                <input 
+                    type="text" 
+                    class="form-control" 
+                    id="first_name" 
+                    name="first_name" 
+                    placeholder="Enter your first name" 
+                    required>
+                <div class="invalid-feedback">First name is required.</div>
             </div>
 
+            <!-- Email Field -->
             <div class="form-group">
                 <label for="email_id">Email</label>
-                <input type="email" class="form-control" id="email_id" name="email_id" required>
+                <input 
+                    type="email" 
+                    class="form-control" 
+                    id="email_id" 
+                    name="email_id" 
+                    placeholder="Enter your email" 
+                    required>
+                <div class="invalid-feedback">Please enter a valid email address.</div>
             </div>
 
+            <!-- Mobile Field -->
             <div class="form-group">
                 <label for="mobile">Mobile Number</label>
-                <input type="text" class="form-control" id="mobile" name="mobile" pattern="\d{10}" title="Enter a valid 10-digit mobile number" required>
+                <input 
+                    type="text" 
+                    class="form-control" 
+                    id="mobile" 
+                    name="mobile" 
+                    pattern="\d{10}" 
+                    title="Enter a valid 10-digit mobile number" 
+                    placeholder="Enter your mobile number" 
+                    required>
+                <div class="invalid-feedback">Please enter a valid 10-digit mobile number.</div>
             </div>
 
-            <button type="submit" class="btn btn-primary">Pay Now</button>
+            <!-- Submit Button -->
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary btn-lg">Pay Now</button>
+            </div>
         </form>
     </div>
 
-    <!-- Bootstrap JS (Optional for form handling) -->
+    <!-- Optional Bootstrap JS and Dependencies -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- Custom Validation Script -->
+    <script>
+        // Enable Bootstrap's validation feedback on form submission
+        (function() {
+            'use strict';
+            const forms = document.querySelectorAll('form');
+            forms.forEach(form => {
+                form.addEventListener('submit', function(event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        })();
+    </script>
 </body>
 </html>
