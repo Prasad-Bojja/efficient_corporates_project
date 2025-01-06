@@ -9,12 +9,6 @@
 <body>
     <div class="container">
         <h2 class="mt-5">Payment Checkout</h2>
-
-        {% if error %}
-            <div class="alert alert-danger mt-3">
-                {{ error }}
-            </div>
-        {% endif %}
         
         <form method="POST" action="{% url 'create_payment_transaction' %}">
             {% csrf_token %}
