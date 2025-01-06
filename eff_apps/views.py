@@ -9,6 +9,7 @@ from .phonepe_api import PhonePe
 from django.conf import settings  # Import settings for secure management of constants
 from django.http import JsonResponse, HttpResponseBadRequest, HttpResponse, HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_protect
 
 MERCHANT_ID = settings.MERCHANT_ID
 PHONE_PE_SALT = settings.PHONE_PE_SALT
@@ -23,7 +24,7 @@ logger = logging.getLogger('wallet')
 
 #from django.views.decorators.csrf import ensure_csrf_cookie
 
-@csrf_exempt
+@csrf_protect
 def create_payment_transaction(request):
     context = {}
     logger.info("create_payment_transaction view accessed")
@@ -37,17 +38,20 @@ def create_payment_transaction(request):
 
         if not amount:
             logger.warning("Amount is missing in the request")
-            return JsonResponse({"message": "Amount is required"}, status=400)
+            context['error'] = "Amount is required"
+            return render(request, 'wallet/checkout.html', context)
 
         try:
             amount_float = float(amount)
             if amount_float <= 0:
                 logger.warning("Invalid amount: Amount must be greater than zero")
-                return JsonResponse({"message": "Amount must be greater than zero"}, status=400)
+                context['error'] = "Amount must be greater than zero"
+                return render(request, 'wallet/checkout.html', context)
             amount_cents = int(amount_float * 100)
         except ValueError:
             logger.error("Invalid amount provided", exc_info=True)
-            return JsonResponse({"message": "Invalid amount"}, status=400)
+            context['error'] = "Invalid amount format"
+            return render(request, 'wallet/checkout.html', context)
 
         logger.debug("Amount validated successfully")
         phonepe = PhonePe(
@@ -63,34 +67,39 @@ def create_payment_transaction(request):
             logger.info("PhonePe transaction initiated")
         except Exception as e:
             logger.error("Error while creating transaction with PhonePe API", exc_info=True)
-            return JsonResponse({"message": "Error with payment API", "error": str(e)}, status=500)
+            context['error'] = "Error with payment API. Please try again."
+            return render(request, 'wallet/checkout.html', context)
 
-        if order_data.get('code') == "PAYMENT_INITIATED":
-            transaction, created = PaymentTransaction.objects.get_or_create(
-                first_name=first_name,
-                email_id=email_id,
-                mobile=mobile,
-                order_id=order_id,
-                defaults={
-                    'amount': amount_cents,
-                    'status': "PENDING",
-                    'message': order_data.get("message", ""),
-                    'payment_link': order_data.get("data", {}).get("instrumentResponse", {}).get("redirectInfo", {}).get("url", ""),
-                    'base_amount': amount_float,
-                }
-            )
+        redirect_url = order_data.get("data", {}).get("instrumentResponse", {}).get("redirectInfo", {}).get("url", "")
+        if not redirect_url:
+            logger.error("Missing redirect URL in response")
+            context['error'] = "Payment initiation failed. Please contact support."
+            return render(request, 'wallet/checkout.html', context)
 
-            if created:
-                logger.info("Transaction created successfully")
-                return redirect(transaction.payment_link)
-            else:
-                logger.warning("Transaction already exists")
-                return JsonResponse({"message": "Transaction already exists"}, status=400)
+        transaction, created = PaymentTransaction.objects.get_or_create(
+            first_name=first_name,
+            email_id=email_id,
+            mobile=mobile,
+            order_id=order_id,
+            defaults={
+                'amount': amount_cents,
+                'status': "PENDING",
+                'message': order_data.get("message", ""),
+                'payment_link': redirect_url,
+                'base_amount': amount_float,
+            }
+        )
+
+        if created:
+            logger.info("Transaction created successfully")
+            return redirect(redirect_url)
         else:
-            logger.error("Payment initiation failed")
-            return JsonResponse({"message": "Payment initiation failed", "error": order_data.get('message')}, status=500)
+            logger.warning("Transaction already exists")
+            context['error'] = "A transaction with this data already exists."
+            return render(request, 'wallet/checkout.html', context)
 
     return render(request, 'wallet/checkout.html', context)
+
 
 def home(request):
     return render(request, 'wallet/index.html')
