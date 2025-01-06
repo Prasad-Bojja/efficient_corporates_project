@@ -86,11 +86,10 @@ DEBUG = False
 ALLOWED_HOSTS = ['128.199.26.204']  # Replace with your server's public IP or domain name
 
 # CSRF and Cookie Security
-CSRF_TRUSTED_ORIGINS = ['http://128.199.26.204']
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
-SECURE_SSL_REDIRECT = False  # Set to True if serving over HTTPS
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+CSRF_TRUSTED_ORIGINS = ['http://128.199.26.204']  # Your HTTP origin
+SESSION_COOKIE_SECURE = False  # Allow cookies to be sent over HTTP
+CSRF_COOKIE_SECURE = False  # Allow CSRF cookies over HTTP
+SECURE_SSL_REDIRECT = False  # Do not redirect to HTTPS
 X_FRAME_OPTIONS = 'DENY'  # Prevent clickjacking attacks
 
 

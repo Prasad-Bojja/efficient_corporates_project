@@ -15,7 +15,7 @@
             
             <div class="form-group">
                 <label for="amount">Amount (in Rs.)</label>
-                <input type="text" class="form-control" id="amount" name="amount" required>
+                <input type="number" class="form-control" id="amount" name="amount" min="1" required>
             </div>
             
             <div class="form-group">
@@ -30,12 +30,32 @@
 
             <div class="form-group">
                 <label for="mobile">Mobile Number</label>
-                <input type="text" class="form-control" id="mobile" name="mobile" required>
+                <input type="text" class="form-control" id="mobile" name="mobile" pattern="\d{10}" title="Enter a valid 10-digit mobile number" required>
             </div>
 
-            <button type="submit" class="btn btn-primary">Pay Now</button>
+            <button type="submit" class="btn btn-primary" onclick="this.disabled=true; this.form.submit();">Pay Now</button>
         </form>
     </div>
+
+    <script>
+        // CSRF Cookie Getter
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        const csrfToken = getCookie('csrftoken');
+    </script>
 
     <!-- Bootstrap JS (Optional for form handling) -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
