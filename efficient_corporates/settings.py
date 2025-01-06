@@ -86,7 +86,7 @@ DEBUG = False
 ALLOWED_HOSTS = ['128.199.26.204']  # Replace with your server's public IP or domain name
 
 # CSRF and Cookie Security
-CSRF_TRUSTED_ORIGINS = ['http://128.199.26.204', 'https://128.199.26.204']
+CSRF_TRUSTED_ORIGINS = ['http://128.199.26.204']
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 SECURE_SSL_REDIRECT = False  # Set to True if serving over HTTPS
