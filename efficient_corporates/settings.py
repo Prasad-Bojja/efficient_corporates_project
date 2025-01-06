@@ -1,34 +1,31 @@
 from pathlib import Path
-import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-angk520w03#o&^ucga)7#pevu0wyz_so*=ac-y@^#cc+gbv%o+'
 
+# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['128.199.26.204',]
+ALLOWED_HOSTS = ['128.199.26.204']  # Update with your actual production host(s)
 
-# CSRF and Session Configuration
-CSRF_COOKIE_SECURE = True  # Ensure CSRF cookie is sent over HTTPS only
-CSRF_COOKIE_SAMESITE = 'None'  # For cross-site cookies (works on mobile and desktop)
-CSRF_TRUSTED_ORIGINS = ['http://128.199.26.204', 'https://128.199.26.204']  # Include both HTTP and HTTPS
-
-SESSION_COOKIE_SECURE = True  # Ensure session cookies are sent over HTTPS only
-SESSION_COOKIE_SAMESITE = 'None'  # For cross-site session cookies (works on mobile and desktop)
-
-# CORS Settings (for AJAX/requests from other origins)
-CORS_ALLOW_ALL_ORIGINS = True  # Allow all origins (you can customize this based on your needs)
-CORS_ALLOWED_ORIGINS = [
-    'http://128.199.26.204',
-    'https://128.199.26.204',
+# Application definition
+INSTALLED_APPS = [
+    'whitenoise.runserver_nostatic',  # For serving static files in production
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'eff_apps',  # Replace with your actual app name
 ]
 
-# Middleware Settings
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # For static files management in production
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -37,36 +34,59 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-INSTALLED_APPS = [
-    'whitenoise.runserver_nostatic',  
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'eff_apps',
-]
+ROOT_URLCONF = 'efficient_corporates.urls'
 
-# Static and Media Files Configuration
-STATIC_URL = 'static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
-# Database Settings
+# Database settings
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.sqlite3',  # Change to PostgreSQL, MySQL, etc., for production
+        'NAME': BASE_DIR / 'db.sqlite3',  # Change path for production database
     }
 }
 
+# CSRF settings
+CSRF_TRUSTED_ORIGINS = ['http://128.199.26.204', 'https://128.199.26.204']  # Add all trusted origins
+CSRF_COOKIE_SECURE = True  # Secure CSRF cookie in production
+SESSION_COOKIE_SECURE = True  # Secure session cookie in production
+
+# Security settings
+SECURE_SSL_REDIRECT = True  # Force all HTTP requests to redirect to HTTPS
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')  # For setups behind a proxy/load balancer
+X_FRAME_OPTIONS = 'DENY'  # Protect against clickjacking
+SECURE_HSTS_SECONDS = 31536000  # HTTP Strict Transport Security (HSTS)
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True  # Include subdomains in HSTS
+SECURE_HSTS_PRELOAD = True  # Preload HSTS
+
+# Internationalization
+LANGUAGE_CODE = 'en-us'
+TIME_ZONE = 'Asia/Kolkata'
+USE_I18N = True
+USE_TZ = True
+
+# Static files (CSS, JavaScript, images)
+STATIC_URL = 'static/'
+
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# To collect static files during deployment (run `python manage.py collectstatic`)
+# Make sure your static files are configured properly for production
+
+# Media files
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
+# Logging settings
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
     'formatters': {
         'verbose': {
             'format': '{levelname} {asctime} {module} {message}',
+            'style': '{',
+        },
+        'simple': {
+            'format': '{levelname} {message}',
             'style': '{',
         },
     },
@@ -88,50 +108,20 @@ LOGGING = {
             'level': 'DEBUG',
             'propagate': True,
         },
+        'wallet': {  # Custom logger for your app
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
     },
 }
 
-# Template Configuration
-TEMPLATES = [
-    {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['templates'],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
-            ],
-        },
-    },
-]
 
-# WSGI Application
-WSGI_APPLICATION = 'efficient_corporates.wsgi.application'
-
-# Site Configuration
-SITE_ID = 1
-LANGUAGE_CODE = 'en-us'
-TIME_ZONE = 'Asia/Kolkata'
-USE_I18N = True
-USE_TZ = True
-
-# Password Validation
-AUTH_PASSWORD_VALIDATORS = [
-    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
-    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
-    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
-    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
-]
-
-# Security Settings
-SECURE_SSL_REDIRECT = True  # Redirect HTTP to HTTPS in production
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')  # For setups behind a proxy/load balancer
-X_FRAME_OPTIONS = 'DENY'  # Prevent embedding site in iframes (clickjacking protection)
-
-# Custom Redirect URL for Payment and Webhooks (if applicable)
+MERCHANT_ID="PGTESTPAYUAT140"
+PHONE_PE_SALT="775765ff-824f-4cc4-9053-c3926e493514"
+PHONE_PE_HOST="https://api-preprod.phonepe.com/apis/pg-sandbox"
+# Custom Redirect and Callback URLs for payment integration
 DJANGO_CUSTOM_REDIRECT_URL = "http://128.199.26.204/payment-status/"
 DJANGO_CUSTOM_CALLBACK_URL = "http://128.199.26.204/webhook/"
 
+# Add any other settings specific to your production environment
