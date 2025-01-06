@@ -73,21 +73,25 @@ DJANGO_CUSTOM_CALLBACK_URL="http://128.199.26.204/webhook/"
 
 #DEBUG = False
 # Specify trusted origins for CSRF protection
-CSRF_TRUSTED_ORIGINS = ['http://128.199.26.204',]
-ALLOWED_HOSTS = ['128.199.26.204']
+# CSRF_TRUSTED_ORIGINS = ['http://128.199.26.204',]
+# ALLOWED_HOSTS = ['128.199.26.204']
 #SESSION_COOKIE_SAMESITE = None
 #CSRF_COOKIE_SECURE = False
 #CSRF_COOKIE_SECURE = True
 #SESSION_COOKIE_SECURE = True
 #X_FRAME_OPTIONS = 'DENY'  # Protects against clickjacking
 #SESSION_COOKIE_SECURE = False
-CORS_ALLOW_ALL_ORIGINS = True
 
-CORS_ALLOWED_ORIGINS = [
-    'http://128.199.26.204'
-]
-#SITE_ID = 1
+DEBUG = False
+ALLOWED_HOSTS = ['128.199.26.204']  # Replace with your server's public IP or domain name
 
+# CSRF and Cookie Security
+CSRF_TRUSTED_ORIGINS = ['http://128.199.26.204', 'https://128.199.26.204']
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+SECURE_SSL_REDIRECT = False  # Set to True if serving over HTTPS
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+X_FRAME_OPTIONS = 'DENY'  # Prevent clickjacking attacks
 
 
 TEMPLATES = [
@@ -154,7 +158,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
