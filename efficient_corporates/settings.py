@@ -61,11 +61,10 @@ DEBUG = False
 ALLOWED_HOSTS = ['128.199.26.204']  # Replace with your server's public IP or domain name
 
 # CSRF and Cookie Security
-CSRF_TRUSTED_ORIGINS = ['http://128.199.26.204']  # Your HTTP origin
-SESSION_COOKIE_SECURE = False  # Allow cookies to be sent over HTTP
-CSRF_COOKIE_SECURE = False  # Allow CSRF cookies over HTTP
-SECURE_SSL_REDIRECT = False  # Do not redirect to HTTPS
-X_FRAME_OPTIONS = 'DENY'  # Prevent clickjacking attacks
+CSRF_TRUSTED_ORIGINS = ['http://128.199.26.204']  # 
+
+
+CORS_ALLOWED_ORIGINS = ['http://128.199.26.204']
 
 
 TEMPLATES = [
@@ -133,6 +132,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+CORS_ALLOW_ALL_ORIGINS = True
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
