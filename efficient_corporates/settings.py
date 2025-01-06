@@ -156,10 +156,11 @@ DJANGO_CUSTOM_REDIRECT_URL = "http://128.199.26.204/payment-status/"
 DJANGO_CUSTOM_CALLBACK_URL = "http://128.199.26.204/webhook/"
 
 # Optional: Adjust security settings for production
-CSRF_COOKIE_SECURE = True
-SESSION_COOKIE_SECURE = True
+#CSRF_COOKIE_SECURE = True
+#SESSION_COOKIE_SECURE = True
 X_FRAME_OPTIONS = 'DENY'
-
+CSRF_COOKIE_SECURE = False 
+SESSION_COOKIE_SECURE = False
 # Optional: Enable CORS if needed
 CORS_ALLOW_ALL_ORIGINS = False
 CORS_ALLOWED_ORIGINS = ['http://128.199.26.204', 'https://128.199.26.204']
