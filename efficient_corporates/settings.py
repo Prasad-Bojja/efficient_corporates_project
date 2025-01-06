@@ -71,7 +71,7 @@ DJANGO_CUSTOM_CALLBACK_URL="http://128.199.26.204/webhook/"
 # SITE_ID = 1
 
 
-DEBUG = False
+#DEBUG = False
 # Specify trusted origins for CSRF protection
 CSRF_TRUSTED_ORIGINS = ['http://128.199.26.204',]
 ALLOWED_HOSTS = ['128.199.26.204']
@@ -199,7 +199,7 @@ LOGGING = {
             'propagate': True,
         },
         'wallet': {  # Custom logger for your app
-            'handlers': [ 'file'],
+            'handlers': ['file'],
             'level': 'DEBUG',
             'propagate': False,
         },
