@@ -3,47 +3,64 @@ name: Deploy to DigitalOcean
 on:
   push:
     branches:
-      - main  # Trigger the workflow on pushes to the 'main' branch
+      - main  # Trigger workflow on pushes to the 'main' branch
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
+      # Step 1: Checkout the code from the repository
       - name: Checkout Code
         uses: actions/checkout@v4
 
+      # Step 2: Set up the Python environment
       - name: Set Up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'  # Match your project’s Python version
 
+      # Step 3: (Optional) Install dependencies locally for testing
       - name: Install Dependencies Locally
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-      - name: Deploy to DigitalOcean via SSH
+
+      # Step 4: Transfer project files to the DigitalOcean droplet using SCP
+      - name: Deploy to DigitalOcean via SCP
         uses: appleboy/scp-action@v0.1.4
         with:
           host: ${{ secrets.DO_DROPLET_IP }}
           username: ${{ secrets.DO_SSH_USERNAME }}
           key: ${{ secrets.DO_SSH_PRIVATE_KEY }}
-          source: "."
-          target: "/var/www/efficient_corporates_project"  # Path on the droplet
+          source: "."  # Project source directory
+          target: "/var/www/efficient_corporates_project"  # Target directory on the server
 
-      - name: SSH and Restart Services
+      # Step 5: SSH into the server, set up the environment, and restart services
+      - name: SSH and Deploy Changes
         uses: appleboy/ssh-action@v1.0.0
         with:
           host: ${{ secrets.DO_DROPLET_IP }}
           username: ${{ secrets.DO_SSH_USERNAME }}
           key: ${{ secrets.DO_SSH_PRIVATE_KEY }}
           script: |
+            # Navigate to the project directory
             cd /var/www/efficient_corporates_project
-            python3 -m venv venv  # Create virtual environment
-            source venv/bin/activate  # Activate virtual environment
-            pip install --upgrade pip  # Ensure pip is updated
+            
+            # Create virtual environment if it doesn't exist
+            if [ ! -d "venv" ]; then
+              python3 -m venv venv
+            fi
+            
+            # Activate the virtual environment and install dependencies
+            source venv/bin/activate
+            pip install --upgrade pip
             pip install -r requirements.txt
+            
+            # Run migrations and collect static files
             python manage.py migrate
             python manage.py collectstatic --noinput
-            systemctl restart gunicorn
-            systemctl restart nginx
+            
+            # Restart Gunicorn and gracefully reload NGINX
+            sudo systemctl restart gunicorn
+            sudo systemctl reload nginx
